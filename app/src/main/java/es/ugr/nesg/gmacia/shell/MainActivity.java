@@ -54,17 +54,19 @@ public class MainActivity extends Activity {
 
         // Genera o lee el Identificador del móvil
 
-        //SharedPreferences sharedPref = context.getSharedPreferences("es.ugr.nesg.gmacia.shell.PREFERENCES_FILE", Context.MODE_PRIVATE);
-        /*if (sharedPref.contains("UUID")) {
+        SharedPreferences sharedPref = context.getSharedPreferences("es.ugr.nesg.gmacia.shell.PREFERENCES_FILE", Context.MODE_PRIVATE);
+        if (sharedPref.contains("UUID")) {
             movilID = sharedPref.getString("UUID", "");
             Log.d ("Preferences", "Leidas preferences desde disco: " + movilID);
         } else {
             movilID = UUID.randomUUID().toString();
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("UUID", movilID);
-            Log.d ("Preferences", "Creado UUID: " + movilID);
-        }*/
-        movilID = UUID.randomUUID().toString();
+            editor.commit();
+            Log.d ("Preferences", "Guardado UUID en fichero de preferencias: " + movilID);
+        }
+
+        //movilID = UUID.randomUUID().toString();
 
         // BOTON SHELL
         btn.setOnClickListener(new View.OnClickListener() {
