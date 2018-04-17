@@ -113,16 +113,16 @@ public class MainActivity extends Activity {
                 String ipString = String.format("%d.%d.%d.%d", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff), (ip >> 24 & 0xff));
 
                 WifiInfo wifiInfo = wm.getConnectionInfo();
-                if (WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState()) == NetworkInfo.DetailedState.CONNECTED) {
-                    ssid = wifiInfo.getSSID();
-                }
+                //if (WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState()) == NetworkInfo.DetailedState.CONNECTED) {
+                //    ssid = wifiInfo.getSSID();
+                //}
 
                 Log.d(TAG, "Ip Addr: " + ipString);
                 Log.d(TAG, "BSSID: " + ssid);
                 Log.d(TAG, wifiInfo.toString());
                 out.setText(ipString);
-                sendDataToServer(movilID + "," + ipString + "," + wifiInfo.toString());
-
+                //sendDataToServer(movilID + "," + ipString + "," + wifiInfo.toString());
+                sendDataToServer (movilID + "," + ipString + "," + wifiInfo.getSSID());
 
 
             }

@@ -16,7 +16,10 @@ import java.net.Socket;
 import java.net.URL;
 import java.security.KeyStore;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+
 import javax.net.ssl.HttpsURLConnection;
 
 
@@ -30,9 +33,10 @@ public class MDSM_SslServerConnection implements Runnable {
     private Context c;
 
     public MDSM_SslServerConnection (String data, Context c) {
-        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-
-        this.data = currentDateTimeString + "," + data;
+        long tim=System.currentTimeMillis();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String curTime =df.format(tim);
+        this.data = curTime + "," + data;
         this.c = c;
     }
     public void run() {
