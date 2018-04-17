@@ -14,14 +14,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.URL;
-import java.net.URLConnection;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-
+import java.text.DateFormat;
+import java.util.Date;
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
 
 
 /**
@@ -34,7 +30,9 @@ public class MDSM_SslServerConnection implements Runnable {
     private Context c;
 
     public MDSM_SslServerConnection (String data, Context c) {
-        this.data = data;
+        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+
+        this.data = currentDateTimeString + "," + data;
         this.c = c;
     }
     public void run() {

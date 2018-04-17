@@ -1,7 +1,11 @@
 package es.ugr.nesg.gmacia.shell;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +32,9 @@ public class MainActivity extends Activity {
     String movilID;
 
     private void sendDataToServer (String data) {
+        /* A partir de la versión 3.0, el envío de mensajes por red debe hacerse en una hebra separada
+           Por este motivo creo la clase con la interfaz runnable, que permite enviar los datos al servidor MDSM.
+         */
         new Thread(new MDSM_SslServerConnection(data, MainActivity.this)).start();
     }
 
@@ -42,7 +49,21 @@ public class MainActivity extends Activity {
         btn_ip = findViewById(R.id.btn_ip);
         out = findViewById(R.id.out);
 
-        // Genera el Identificador del móvil
+        Context context = getApplicationContext();
+
+
+        // Genera o lee el Identificador del móvil
+
+        //SharedPreferences sharedPref = context.getSharedPreferences("es.ugr.nesg.gmacia.shell.PREFERENCES_FILE", Context.MODE_PRIVATE);
+        /*if (sharedPref.contains("UUID")) {
+            movilID = sharedPref.getString("UUID", "");
+            Log.d ("Preferences", "Leidas preferences desde disco: " + movilID);
+        } else {
+            movilID = UUID.randomUUID().toString();
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("UUID", movilID);
+            Log.d ("Preferences", "Creado UUID: " + movilID);
+        }*/
         movilID = UUID.randomUUID().toString();
 
         // BOTON SHELL
@@ -55,6 +76,7 @@ public class MainActivity extends Activity {
                 String outp = exe.Executer(command);
                 out.setText(outp);
                 Log.d("Output: ", outp);
+                sendDataToServer(outp);
             }
         });
 
@@ -69,14 +91,10 @@ public class MainActivity extends Activity {
                 for (ApplicationInfo packageInfo : packages) {
                     String message = "Installed package: " + packageInfo.packageName;
                     answer += message + "\n";
-                    Log.d("InfoCollector", message);
-
-                    //Log.d("InfoCollector", "Source dir : " + packageInfo.sourceDir);
-                    //Log.d("InfoCollector", "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
+                    Log.d("getApps", message);
                 }
                 out.setText(answer);
                 sendDataToServer (answer);
-                //new Thread(new MDSM_SslServerConnection(answer, MainActivity.this)).start();
 
             }
         });
@@ -87,14 +105,24 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View arg0) {
                 String TAG = "Boton IP";
+                String ssid = "";
                 WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
                 Integer ip = wm.getDhcpInfo().ipAddress;
                 String ipString = String.format("%d.%d.%d.%d", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff), (ip >> 24 & 0xff));
+
+                WifiInfo wifiInfo = wm.getConnectionInfo();
+                if (WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState()) == NetworkInfo.DetailedState.CONNECTED) {
+                    ssid = wifiInfo.getSSID();
+                }
+
                 Log.d(TAG, "Ip Addr: " + ipString);
+                Log.d(TAG, "BSSID: " + ssid);
+                Log.d(TAG, wifiInfo.toString());
                 out.setText(ipString);
-                //new Thread(new MDSMmServerConnection("IP del movil: " + ipString)).start();
-                //new Thread(new MDSM_SslServerConnection("IP del movil: " + ipString, MainActivity.this)).start();
-                sendDataToServer(movilID + "," + ipString);
+                sendDataToServer(movilID + "," + ipString + "," + wifiInfo.toString());
+
+
+
             }
         });
     }
