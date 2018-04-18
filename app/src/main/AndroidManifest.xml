@@ -4,8 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
 
 
     <application
@@ -21,7 +20,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -29,7 +27,8 @@
 
         <receiver android:name=".WifiReceiver" android:exported="false" >
             <intent-filter>
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" /> <!-- Permite saber cuándo el usuario desactiva la WIFI o la activa -->
+                <action android:name="android.net.wifi.STATE_CHANGE" /> <!-- Permite saber cuándo cambia la SSID de la WIFI -->
             </intent-filter>
         </receiver>
 
