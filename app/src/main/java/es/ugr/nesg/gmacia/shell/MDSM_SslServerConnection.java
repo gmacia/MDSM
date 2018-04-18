@@ -1,6 +1,7 @@
 package es.ugr.nesg.gmacia.shell;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -31,12 +32,16 @@ public class MDSM_SslServerConnection implements Runnable {
 
     private String data;
     private Context c;
+    private static String movilID;
+
 
     public MDSM_SslServerConnection (String data, Context c) {
         long tim=System.currentTimeMillis();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String curTime =df.format(tim);
-        this.data = curTime + "," + data;
+        SharedPreferences sharedPref = c.getSharedPreferences("es.ugr.nesg.gmacia.shell.PREFERENCES_FILE", Context.MODE_PRIVATE);
+        movilID = sharedPref.getString("UUID", "");
+        this.data = curTime + "," + movilID + "," + data;
         this.c = c;
     }
     public void run() {
