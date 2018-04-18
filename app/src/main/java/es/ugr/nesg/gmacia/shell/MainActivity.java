@@ -29,7 +29,9 @@ public class MainActivity extends Activity {
     Button btn, btn_getApps, btn_ip;
     TextView out;
     String command;
-    public static  String movilID;
+
+    MDSMUtils mdsmUtils;
+
 
     private void sendDataToServer (String data) {
         /* A partir de la versión 3.0, el envío de mensajes por red debe hacerse en una hebra separada
@@ -49,24 +51,17 @@ public class MainActivity extends Activity {
         btn_ip = findViewById(R.id.btn_ip);
         out = findViewById(R.id.out);
 
-        Context context = getApplicationContext();
+        mdsmUtils = new MDSMUtils(getApplicationContext());
 
-
-        // Genera o lee el Identificador del móvil
-
-        SharedPreferences sharedPref = context.getSharedPreferences("es.ugr.nesg.gmacia.shell.PREFERENCES_FILE", Context.MODE_PRIVATE);
-        if (sharedPref.contains("UUID")) {
-            movilID = sharedPref.getString("UUID", "");
-            Log.d ("Preferences", "Leidas preferences desde disco: " + movilID);
-        } else {
-            movilID = UUID.randomUUID().toString();
+        // Si el UUID que identifica al móvil no está generado lo genera y lo guarda en las preferencias.
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("es.ugr.nesg.gmacia.shell.PREFERENCES_FILE", Context.MODE_PRIVATE);
+        if (!sharedPref.contains("UUID")) {
+            String movilID = UUID.randomUUID().toString();
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("UUID", movilID);
             editor.commit();
             Log.d ("Preferences", "Guardado UUID en fichero de preferencias: " + movilID);
         }
-
-        //movilID = UUID.randomUUID().toString();
 
         // BOTON SHELL
         btn.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +101,17 @@ public class MainActivity extends Activity {
         btn_ip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                //mdsmUtils.test();
+                //Log.d("PRUEBA!!", "IP Local: " + mdsmUtils.getLocalIpAddress());
+                //Log.d("PRUEBA!!", "IP DHCP: " + mdsmUtils.getWifiDhcpAddress());
+                //Log.d("PRUEBA!!", "SSID: " + mdsmUtils.getSsid());
+
+
+                String ipString = mdsmUtils.getLocalIpAddress();
+                String ssid = mdsmUtils.getSsid();
+                mdsmUtils.sendDataToServer(ipString + ":" + ssid);
+
+/*
                 String TAG = "Boton IP";
                 String ssid = "";
                 WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
@@ -114,11 +120,11 @@ public class MainActivity extends Activity {
 
                 WifiInfo wifiInfo = wm.getConnectionInfo();
                 Log.d(TAG, "Ip Addr: " + ipString);
-                Log.d(TAG, "BSSID: " + ssid);
+                Log.d(TAG, "SSID: " + ssid);
                 Log.d(TAG, wifiInfo.toString());
                 out.setText(ipString);
                 sendDataToServer (ipString + "," + wifiInfo.getSSID());
-
+*/
 
             }
         });

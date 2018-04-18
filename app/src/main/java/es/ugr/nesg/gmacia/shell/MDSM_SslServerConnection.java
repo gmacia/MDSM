@@ -34,7 +34,6 @@ public class MDSM_SslServerConnection implements Runnable {
     private Context c;
     private static String movilID;
 
-
     public MDSM_SslServerConnection (String data, Context c) {
         long tim=System.currentTimeMillis();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -47,14 +46,8 @@ public class MDSM_SslServerConnection implements Runnable {
     public void run() {
 
         String TAG = "MDSM_SslServerConnection";
-
-        String serverIp =  "150.214.190.75";
-        int serverPort = 4343;
-        Socket connectionSocket;
         OutputStream out;
-        String TRUSTSTORE_PASSWORD = "prueba";
 
-        KeyStore localTrustStore = null;
         try {
             URL url = new URL("https://mdsm1.ugr.es:4343/");
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
