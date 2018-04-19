@@ -31,7 +31,7 @@ public class MDSM_SslServerConnection implements Runnable {
 
     public MDSM_SslServerConnection (String data, Context c) {
         long tim=System.currentTimeMillis();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String curTime =df.format(tim);
         SharedPreferences sharedPref = c.getSharedPreferences("es.ugr.nesg.gmacia.shell.PREFERENCES_FILE", Context.MODE_PRIVATE);
         movilID = sharedPref.getString("UUID", "");
