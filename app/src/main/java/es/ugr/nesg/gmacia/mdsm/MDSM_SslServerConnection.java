@@ -1,4 +1,4 @@
-package es.ugr.nesg.gmacia.shell;
+package es.ugr.nesg.gmacia.mdsm;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,13 +13,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.Socket;
 import java.net.URL;
-import java.security.KeyStore;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 

@@ -1,10 +1,8 @@
-package es.ugr.nesg.gmacia.shell;
+package es.ugr.nesg.gmacia.mdsm;
 
 import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Handler;
-import android.text.format.Formatter;
 import android.util.Log;
 
 import java.net.InetAddress;

@@ -1,10 +1,9 @@
-package es.ugr.nesg.gmacia.shell;
+package es.ugr.nesg.gmacia.mdsm;
 
 /**
  * Created by gmacia on 16/04/2018.
  */
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;

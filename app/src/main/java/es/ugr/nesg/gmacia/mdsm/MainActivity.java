@@ -1,12 +1,9 @@
-package es.ugr.nesg.gmacia.shell;
+package es.ugr.nesg.gmacia.mdsm;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,12 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.app.Activity;
 
-import java.math.BigInteger;
-import java.net.*;
 import java.util.*;
 import java.util.List;
-
-import javax.net.ssl.HttpsURLConnection;
 
 
 public class MainActivity extends Activity {

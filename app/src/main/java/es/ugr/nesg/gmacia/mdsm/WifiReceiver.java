@@ -1,4 +1,4 @@
-package es.ugr.nesg.gmacia.shell;
+package es.ugr.nesg.gmacia.mdsm;
 
 /**
  * Created by gmacia on 17/04/2018.
@@ -46,7 +46,6 @@ public class WifiReceiver extends BroadcastReceiver {
                 String ip = mdsmUtils.getLocalIpAddress();
                 Log.d(TAG, ip + ", Wifi disabled");
                 mdsmUtils.sendDataToServer(ip+ ", Wifi disabled");
-
             }
         }
 
@@ -91,7 +90,7 @@ public class WifiReceiver extends BroadcastReceiver {
             // Need to wait a bit for the SSID to get picked up;
             // if done immediately all we'll get is null
             final MDSMUtils mdsmUtils = new MDSMUtils(super.getApplicationContext());
-            mdsmUtils.sendDataToServer("Detected connection to SSID. Fetching data...");
+            mdsmUtils.sendDataToServer("[],Detected connection to SSID. Fetching data...");
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -118,7 +117,7 @@ public class WifiReceiver extends BroadcastReceiver {
          */
         private void createNotification(String ssid) {
             Notification n = new NotificationCompat.Builder(this)
-                    .setContentTitle("Wifi Connection")
+                    .setContentTitle("MDSM Server notified")
                     .setContentText("Connected to " + ssid)
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText("You're connected to " + ssid))

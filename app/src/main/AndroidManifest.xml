@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="es.ugr.nesg.gmacia.shell">
+    package="es.ugr.nesg.gmacia.mdsm">
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="es.ugr.nesg.gmacia.mdsm.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -25,14 +25,14 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".WifiReceiver" android:exported="false" >
+        <receiver android:name="es.ugr.nesg.gmacia.mdsm.WifiReceiver" android:exported="false" >
             <intent-filter>
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" /> <!-- Permite saber cuándo el usuario desactiva la WIFI o la activa -->
                 <action android:name="android.net.wifi.STATE_CHANGE" /> <!-- Permite saber cuándo cambia la SSID de la WIFI -->
             </intent-filter>
         </receiver>
 
-        <service android:name="WifiReceiver$WifiActiveService" android:exported="false" />
+        <service android:name="es.ugr.nesg.gmacia.mdsm.WifiReceiver$WifiActiveService" android:exported="false" />
     </application>
 
 </manifest>

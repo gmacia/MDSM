@@ -5,7 +5,7 @@
  * PERO QUE NO SE ESTÁ UTILIZANDO PORQUE ES INSEGURA.
  */
 
-package es.ugr.nesg.gmacia.shell;
+package es.ugr.nesg.gmacia.mdsm;
 
 import android.util.Log;
 
