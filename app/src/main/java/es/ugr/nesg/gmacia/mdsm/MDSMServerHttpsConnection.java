@@ -44,32 +44,38 @@ public class MDSMServerHttpsConnection implements Runnable {
 
         String TAG = "MDSMServerHttpsConnection";
         OutputStream out;
-
-        try {
-            URL url = new URL("https","mdsm1.ugr.es", this.port,"/");
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
-            connection.setSSLSocketFactory(CustomSSLSocketFactory.getSSLSocketFactory(c));
-
-            out = new BufferedOutputStream(connection.getOutputStream());
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
-            Log.d(TAG, "Sending data to server: " + data);
-            writer.write(data);
-            writer.flush();
-            writer.close();
-            out.close();
-
-            String answer = readInputStreamToString(connection);
-
-            Log.d(TAG, "Recibido: " + answer);
-            connection.disconnect();
+        int intentos = 0;
+        String answer = "";
 
 
-        } catch (Exception e) {
-            Log.d(TAG, "Capturada excepcion: " + e.toString());
+        // El protocolo establece que se si no se recibe un OK al mensaje, se intentará mandar
+        // de nuevo al servidor hasta un máximo de tres veces.
+        while (!answer.equals("OK") && intentos <3) {
+            try {
+                intentos += 1;
+
+                URL url = new URL("https", "mdsm1.ugr.es", this.port, "/");
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+                connection.setSSLSocketFactory(CustomSSLSocketFactory.getSSLSocketFactory(c));
+
+                out = new BufferedOutputStream(connection.getOutputStream());
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                Log.d(TAG, "Sending data to server: " + data);
+                writer.write(data);
+                writer.flush();
+                writer.close();
+                out.close();
+
+                String answer = readInputStreamToString(connection);
+
+                Log.d(TAG, "Recibido: " + answer);
+                connection.disconnect();
+            } catch (Exception e) {
+                Log.d(TAG, "Capturada excepcion: " + e.toString());
+            }
         }
-
     }
 
     private String readInputStreamToString(HttpsURLConnection connection) {
