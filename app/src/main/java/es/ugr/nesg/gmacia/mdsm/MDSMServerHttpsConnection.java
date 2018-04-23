@@ -68,7 +68,7 @@ public class MDSMServerHttpsConnection implements Runnable {
                 writer.close();
                 out.close();
 
-                String answer = readInputStreamToString(connection);
+                answer = readInputStreamToString(connection);
 
                 Log.d(TAG, "Recibido: " + answer);
                 connection.disconnect();
