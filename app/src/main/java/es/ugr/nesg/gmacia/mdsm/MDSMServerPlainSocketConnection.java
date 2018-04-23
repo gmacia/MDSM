@@ -15,10 +15,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 
-public class MDSMmServerConnection implements Runnable {
+public class MDSMServerPlainSocketConnection implements Runnable {
     private String data;
 
-    public MDSMmServerConnection(String data) {
+    public MDSMServerPlainSocketConnection(String data) {
         this.data = data;
         this.data += "\n[+] End of message\n";
 

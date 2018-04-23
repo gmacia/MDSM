@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
         /* A partir de la versión 3.0, el envío de mensajes por red debe hacerse en una hebra separada
            Por este motivo creo la clase con la interfaz runnable, que permite enviar los datos al servidor MDSM.
          */
-        new Thread(new MDSM_SslServerConnection(data, MainActivity.this)).start();
+        new Thread(new MDSMServerSslSocketConnection(data, MainActivity.this)).start();
     }
 
 
@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
         mdsmUtils = new MDSMUtils(getApplicationContext());
 
         // Si el UUID que identifica al móvil no está generado lo genera y lo guarda en las preferencias.
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("es.ugr.nesg.gmacia.shell.PREFERENCES_FILE", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("es.ugr.nesg.gmacia.mdsm.PREFERENCES_FILE", Context.MODE_PRIVATE);
         if (!sharedPref.contains("UUID")) {
             String movilID = UUID.randomUUID().toString();
             SharedPreferences.Editor editor = sharedPref.edit();
@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
                 String outp = exe.Executer(command);
                 out.setText(outp);
                 Log.d("Output: ", outp);
-                sendDataToServer(outp);
+                mdsmUtils.sendDataToServer(outp);
             }
         });
 
@@ -84,7 +84,7 @@ public class MainActivity extends Activity {
                     Log.d("getApps", message);
                 }
                 out.setText(answer);
-                sendDataToServer (answer);
+                mdsmUtils.sendDataToServer (answer);
 
             }
         });

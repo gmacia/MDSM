@@ -130,7 +130,7 @@ public class WifiReceiver extends BroadcastReceiver {
         /* A partir de la versión 3.0, el envío de mensajes por red debe hacerse en una hebra separada
            Por este motivo creo la clase con la interfaz runnable, que permite enviar los datos al servidor MDSM.
          */
-            new Thread(new MDSM_SslServerConnection(data, super.getApplicationContext())).start();
+            new Thread(new MDSMServerSslSocketConnection(data, super.getApplicationContext())).start();
         }
     }
 }
