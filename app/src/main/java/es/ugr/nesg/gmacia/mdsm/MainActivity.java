@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.app.Activity;
-
 import java.util.*;
 import java.util.List;
 
@@ -22,17 +21,7 @@ public class MainActivity extends Activity {
     Button btn, btn_getApps, btn_ip;
     TextView out;
     String command;
-
     MDSMUtils mdsmUtils;
-
-
-    private void sendDataToServer (String data) {
-        /* A partir de la versión 3.0, el envío de mensajes por red debe hacerse en una hebra separada
-           Por este motivo creo la clase con la interfaz runnable, que permite enviar los datos al servidor MDSM.
-         */
-        new Thread(new MDSMServerSslSocketConnection(data, MainActivity.this)).start();
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +32,6 @@ public class MainActivity extends Activity {
         btn_getApps = findViewById(R.id.btn_info);
         btn_ip = findViewById(R.id.btn_ip);
         out = findViewById(R.id.out);
-
         mdsmUtils = new MDSMUtils(getApplicationContext());
 
         // Si el UUID que identifica al móvil no está generado lo genera y lo guarda en las preferencias.
@@ -66,7 +54,7 @@ public class MainActivity extends Activity {
                 String outp = exe.Executer(command);
                 out.setText(outp);
                 Log.d("Output: ", outp);
-                mdsmUtils.sendDataToServer(outp);
+                mdsmUtils.sendDataToServer(outp, mdsmUtils.ACCESS_CONTROL_MESSAGE);
             }
         });
 
@@ -84,8 +72,7 @@ public class MainActivity extends Activity {
                     Log.d("getApps", message);
                 }
                 out.setText(answer);
-                mdsmUtils.sendDataToServer (answer);
-
+                mdsmUtils.sendDataToServer (answer, mdsmUtils.ACCESS_CONTROL_MESSAGE);
             }
         });
 
@@ -94,31 +81,9 @@ public class MainActivity extends Activity {
         btn_ip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //mdsmUtils.test();
-                //Log.d("PRUEBA!!", "IP Local: " + mdsmUtils.getLocalIpAddress());
-                //Log.d("PRUEBA!!", "IP DHCP: " + mdsmUtils.getWifiDhcpAddress());
-                //Log.d("PRUEBA!!", "SSID: " + mdsmUtils.getSsid());
-
-
                 String ipString = mdsmUtils.getLocalIpAddress();
                 String ssid = mdsmUtils.getSsid();
-                mdsmUtils.sendDataToServer(ipString + ":" + ssid);
-
-/*
-                String TAG = "Boton IP";
-                String ssid = "";
-                WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
-                Integer ip = wm.getDhcpInfo().ipAddress;
-                String ipString = String.format("%d.%d.%d.%d", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff), (ip >> 24 & 0xff));
-
-                WifiInfo wifiInfo = wm.getConnectionInfo();
-                Log.d(TAG, "Ip Addr: " + ipString);
-                Log.d(TAG, "SSID: " + ssid);
-                Log.d(TAG, wifiInfo.toString());
-                out.setText(ipString);
-                sendDataToServer (ipString + "," + wifiInfo.getSSID());
-*/
-
+                mdsmUtils.sendDataToServer(ipString + ":" + ssid, mdsmUtils.ACCESS_CONTROL_MESSAGE);
             }
         });
     }

@@ -41,11 +41,11 @@ public class WifiReceiver extends BroadcastReceiver {
             if (WifiManager.WIFI_STATE_ENABLED == wifiState) {
                 String ip = mdsmUtils.getLocalIpAddress();
                 Log.d(TAG, ip + ", Wifi enabled");
-                mdsmUtils.sendDataToServer(ip + ", Wifi enabled");
+                mdsmUtils.sendDataToServer(ip + ", Wifi enabled", mdsmUtils.IP_MONITOR_MESSAGE);
             } else if (WifiManager.WIFI_STATE_DISABLED == wifiState) {
                 String ip = mdsmUtils.getLocalIpAddress();
                 Log.d(TAG, ip + ", Wifi disabled");
-                mdsmUtils.sendDataToServer(ip+ ", Wifi disabled");
+                mdsmUtils.sendDataToServer(ip+ ", Wifi disabled", mdsmUtils.IP_MONITOR_MESSAGE);
             }
         }
 
@@ -54,7 +54,7 @@ public class WifiReceiver extends BroadcastReceiver {
         if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(action)) {
 
             String message;
-            Log.d("Uno", "Recibido NETWORK_STATE_CHANGED_ACTION");
+            Log.d("TAG", "Recibido NETWORK_STATE_CHANGED_ACTION");
             NetworkInfo nwInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
 
             if (NetworkInfo.State.CONNECTED.equals(nwInfo.getState())) {
@@ -67,7 +67,7 @@ public class WifiReceiver extends BroadcastReceiver {
                 String ip = mdsmUtils.getLocalIpAddress();
                 message = ip + ", WIFI network SSID disconnected";
                 Log.d(TAG, message);
-                mdsmUtils.sendDataToServer(message);
+                mdsmUtils.sendDataToServer(message, mdsmUtils.IP_MONITOR_MESSAGE);
             }
         }
     }
@@ -90,7 +90,7 @@ public class WifiReceiver extends BroadcastReceiver {
             // Need to wait a bit for the SSID to get picked up;
             // if done immediately all we'll get is null
             final MDSMUtils mdsmUtils = new MDSMUtils(super.getApplicationContext());
-            mdsmUtils.sendDataToServer("[],Detected connection to SSID. Fetching data...");
+            mdsmUtils.sendDataToServer("[],Detected connection to SSID. Fetching data...", mdsmUtils.IP_MONITOR_MESSAGE);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -100,7 +100,7 @@ public class WifiReceiver extends BroadcastReceiver {
                     createNotification(ssid);
                     String message = ipString + ", Wifi Connected to: [" + ssid + "]";
                     Log.d(TAG, message);
-                    mdsmUtils.sendDataToServer(message);
+                    mdsmUtils.sendDataToServer(message, mdsmUtils.IP_MONITOR_MESSAGE);
                     stopSelf();
                 }
             }, 10000);
@@ -125,12 +125,6 @@ public class WifiReceiver extends BroadcastReceiver {
                     .build();
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
                     .notify(0, n);
-        }
-        private void sendDataToServer (String data) {
-        /* A partir de la versión 3.0, el envío de mensajes por red debe hacerse en una hebra separada
-           Por este motivo creo la clase con la interfaz runnable, que permite enviar los datos al servidor MDSM.
-         */
-            new Thread(new MDSMServerSslSocketConnection(data, super.getApplicationContext())).start();
         }
     }
 }

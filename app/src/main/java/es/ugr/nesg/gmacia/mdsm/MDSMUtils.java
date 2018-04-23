@@ -19,9 +19,16 @@ public class MDSMUtils {
     private Context context;
     private final static String TAG = MDSMUtils.class.getSimpleName();
 
+    // Estas dos cadenas permitirán diferenciar a qué puerto se envían los mensajes cuando se llama a
+    // la función sendMessageToServer
+    public static String IP_MONITOR_MESSAGE = "IP_MONITOR";
+    public static String ACCESS_CONTROL_MESSAGE = "ACCESS_CONTROL";
+
+    // Constructor
     public MDSMUtils(Context context) {
         this.context = context;
     }
+
 
     // Una función de test para la clase
     public void test() {
@@ -45,9 +52,6 @@ public class MDSMUtils {
                     String ip = inetAddress.getHostAddress();
                     if (!inetAddress.isLoopbackAddress() && isIpv4Address(ip)) {
                         resultado += ip + "/";
-
-                        //Log.d("MDSMUtils", valida + inetAddress.getHostAddress());
-                        //return inetAddress.getHostAddress();
                     }
                 }
             }
@@ -79,19 +83,26 @@ public class MDSMUtils {
         return ssid;
     }
 
-    public void sendDataToServer (String data) {
+    public void sendDataToServer (String data, String type) {
         /* A partir de la versión 3.0, el envío de mensajes por red debe hacerse en una hebra separada
            Por este motivo creo la clase con la interfaz runnable, que permite enviar los datos al servidor MDSM.
          */
 
-        // Send with SSL plain socket
-        // new Thread(new MDSMServerSslSocketConnection(data, context)).start();
+        int port;
+        if (type.equals(IP_MONITOR_MESSAGE)) {
+            port=4343;
+        } else {
+            port =2004;
+        }
+
+        // Send with HTTPS socket
+        new Thread(new MDSMServerHttpsConnection(data, context, port)).start();
 
         // Send with plain socket
-        // new Thread(new MDSMServerPlainSocketConnection(data, context)).start();
+        // new Thread(new MDSMServerPlainSocketConnection(data, context, port)).start();
 
-        // Send with HTTPS
-        new Thread(new MDSMServerHttpsConnection(data, context)).start();
+        // Send with SSL socket
+        //new Thread(new MDSMServerSslSocketConnection(data, context, port)).start();
 
     }
 

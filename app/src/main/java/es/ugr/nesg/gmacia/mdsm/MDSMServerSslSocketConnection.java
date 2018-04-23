@@ -1,5 +1,9 @@
 package es.ugr.nesg.gmacia.mdsm;
 
+/**
+ * Created by gmacia on 21/04/2018.
+ */
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -16,7 +20,12 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 
+import javax.net.SocketFactory;
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
 
 
 /**
@@ -28,8 +37,9 @@ public class MDSMServerSslSocketConnection implements Runnable {
     private String data;
     private Context c;
     private static String movilID;
+    private int port;
 
-    public MDSMServerSslSocketConnection(String data, Context c) {
+    public MDSMServerSslSocketConnection(String data, Context c, int port) {
         long tim=System.currentTimeMillis();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String curTime =df.format(tim);
@@ -37,30 +47,37 @@ public class MDSMServerSslSocketConnection implements Runnable {
         movilID = sharedPref.getString("UUID", "");
         this.data = curTime + "," + movilID + "," + data;
         this.c = c;
+        this.port = port;
     }
     public void run() {
 
-        String TAG = "MDSMServerSslSocketConnection";
+        String TAG = MainActivity.class.getName();
         OutputStream out;
 
         try {
-            URL url = new URL("https://mdsm1.ugr.es:4343/");
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
-            connection.setSSLSocketFactory(CustomSSLSocketFactory.getSSLSocketFactory(c));
+            SocketFactory sf = CustomSSLSocketFactory.getSSLSocketFactory(c);
+            SSLSocket socket = (SSLSocket) sf.createSocket("mdsm1.ugr.es", this.port);
+            HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
+            SSLSession s = socket.getSession();
 
-            out = new BufferedOutputStream(connection.getOutputStream());
+// Verify that the certicate hostname is for mail.google.com
+// This is due to lack of SNI support in the current SSLSocket.
+            if (!hv.verify("mdsm1.ugr.es", s)) {
+                Log.d(TAG,"Expected mdsm1.ugr.es, found " + s.getPeerPrincipal() );
+                throw new SSLHandshakeException("Expected mdsm1.ugr.es, found " + s.getPeerPrincipal());
+
+            }
+            out = new BufferedOutputStream(socket.getOutputStream());
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
             writer.write(data);
             writer.flush();
             writer.close();
             out.close();
 
-            String answer = readInputStreamToString(connection);
+            String answer = readInputStreamToString(socket);
 
             Log.d(TAG, "Recibido: " + answer);
-            connection.disconnect();
+            socket.close();
 
 
         } catch (Exception e) {
@@ -69,7 +86,7 @@ public class MDSMServerSslSocketConnection implements Runnable {
 
     }
 
-    private String readInputStreamToString(HttpsURLConnection connection) {
+    private String readInputStreamToString(SSLSocket connection) {
         String TAG = "readInputStreamToString";
         String result = null;
         StringBuffer sb = new StringBuffer();
