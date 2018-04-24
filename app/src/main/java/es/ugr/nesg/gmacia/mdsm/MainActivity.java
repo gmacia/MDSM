@@ -19,9 +19,10 @@ public class MainActivity extends Activity {
 
     EditText input;
     Button btn, btn_getApps, btn_ip;
-    TextView out;
+    TextView out,deviceid;
     String command;
     MDSMUtils mdsmUtils;
+    String movilID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +33,24 @@ public class MainActivity extends Activity {
         btn_getApps = findViewById(R.id.btn_info);
         btn_ip = findViewById(R.id.btn_ip);
         out = findViewById(R.id.out);
+        deviceid = findViewById(R.id.deviceid);
         mdsmUtils = new MDSMUtils(getApplicationContext());
 
         // Si el UUID que identifica al móvil no está generado lo genera y lo guarda en las preferencias.
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("es.ugr.nesg.gmacia.mdsm.PREFERENCES_FILE", Context.MODE_PRIVATE);
+
         if (!sharedPref.contains("UUID")) {
-            String movilID = UUID.randomUUID().toString();
+            movilID = UUID.randomUUID().toString();
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("UUID", movilID);
             editor.commit();
             Log.d ("Preferences", "Guardado UUID en fichero de preferencias: " + movilID);
+        } else {
+            movilID = sharedPref.getString("UUID", "");
         }
+        deviceid.setText("Device ID: " + movilID);
+
+
 
         // BOTON SHELL
         btn.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +91,7 @@ public class MainActivity extends Activity {
             public void onClick(View arg0) {
                 String ipString = mdsmUtils.getLocalIpAddress();
                 String ssid = mdsmUtils.getSsid();
+                out.setText(ipString + ":" + ssid);
                 mdsmUtils.sendDataToServer(ipString + ":" + ssid, mdsmUtils.ACCESS_CONTROL_MESSAGE);
             }
         });

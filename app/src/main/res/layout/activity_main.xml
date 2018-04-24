@@ -28,7 +28,9 @@
         android:layout_marginRight="70dp"
         android:layout_marginLeft="70dp"
         android:src="@mipmap/logougr" />
+
     <TextView
+        android:id="@+id/deviceid"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
@@ -81,7 +83,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".50"
-            android:text="Get IP Addr" />
+            android:text="Get IP / SSID" />
 
     </LinearLayout>
 
@@ -95,21 +97,22 @@
         android:layout_marginRight="10dp"
         android:text="Output"
         android:background="@android:drawable/editbox_background_normal"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginTop="20dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/background_dark" />
 
     <ScrollView android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="10dp"
+        android:layout_margin="10dp"
+        android:backgroundTint="#d0d0b0"
+        android:background="@android:color/background_dark">
         <TextView
             android:id="@+id/out"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_width="fill_parent"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textAlignment="textStart"
-            android:backgroundTint="#f32"/>
+            android:textAlignment="textStart" />
     </ScrollView>
 </LinearLayout>
