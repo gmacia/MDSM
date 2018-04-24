@@ -1,45 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_gravity="center"
-    tools:context=".MainActivity" >
+    android:backgroundTintMode="screen"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTintMode="multiply"
+        android:fontFamily="sans-serif-condensed"
         android:gravity="center"
-        android:textAlignment="center"
-        android:text="MDSM Monitor" />
-    <EditText
+        android:text="MDSM: IP Monitor"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:color/background_dark" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginVertical="@dimen/fab_margin"
+        android:maxHeight="20dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginLeft="70dp"
+        android:src="@mipmap/logougr" />
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txt"
-        android:hint="Example - ls" />
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Device ID: "
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
-    <Button
-        android:id="@+id/btn"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Execute" />
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Execute" />
 
-    <Button
-        android:id="@+id/btn_info"
+        <EditText
+            android:id="@+id/txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:hint="Write your command (e.g. ls)"
+            android:backgroundTint="@android:color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Get Apps" />
-    <Button
-        android:id="@+id/btn_ip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Get IP Addr" />
+        android:paddingTop="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button
+            android:id="@+id/btn_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".50"
+            android:text="Get Apps" />
+
+        <Button
+            android:id="@+id/btn_ip"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".50"
+            android:text="Get IP Addr" />
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/out"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="textStart" />
+        android:backgroundTint="@color/colorPrimary"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Output"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@android:color/background_dark" />
 
+    <ScrollView android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp">
+        <TextView
+            android:id="@+id/out"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="textStart"
+            android:backgroundTint="#f32"/>
+    </ScrollView>
 </LinearLayout>
